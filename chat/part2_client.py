@@ -1,5 +1,5 @@
-# Group#:
-# Student Names:
+# Group#: G5
+# Student Names: Weifeng Ke & Peter Kim
 
 #Content of client.py; to complete/implement
 

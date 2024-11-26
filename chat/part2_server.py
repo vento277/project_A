@@ -1,5 +1,5 @@
-# Group#:
-# Student Names:
+# Group#: G5
+# Student Names: Weifang Ke & Peter Kim
 
 #Content of server.py; To complete/implement
 
