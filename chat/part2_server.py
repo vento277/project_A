@@ -1,76 +1,118 @@
 from tkinter import *
 import socket
 import threading
-import sys
 
 class ChatServer:
+    """
+    This class implements the chat server.
+    It uses the socket module to create a TCP socket and act as the chat server.
+    Each chat client connects to the server and sends chat messages to it. When 
+    the server receives a message, it displays it in its own GUI and also sends 
+    the message to the other client.  
+    It uses the tkinter module to create the GUI for the server client.
+    """
     def __init__(self, window):
         self.window = window
-        self.window.title("Server")
-        self.window.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.window.title("Chat Server")
+        self.window.geometry("400x500")
 
-        # UI setup
-        self.chat_box = Text(self.window, state='disabled', wrap='word', bg='lightblue')
-        self.chat_box.pack(padx=10, pady=10, fill=BOTH, expand=True)
-
-        self.clients = []
-        self.server_socket = None
-        self.start_server()
-
-    def start_server(self):
+        # Server socket setup
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.server_socket.bind(("127.0.0.1", 12345))
-        self.server_socket.listen(5)
-        self.display_message("Server started. Waiting for clients...")
-        # Start accepting client connections
-        threading.Thread(target=self.accept_connections, daemon=True).start()
+        self.host = '127.0.0.1'
+        self.port = 12345
+        self.server_socket.bind((self.host, self.port))
+        self.server_socket.listen(5)  # Allow up to 5 connections
+
+        # Client connections list
+        self.clients = []
+        self.client_names = {}
+
+        # GUI Setup
+        self.chat_display = Text(window, height=20, width=50)
+        self.chat_display.pack(padx=10, pady=10)
+        self.chat_display.config(state=DISABLED)
+
+        # Start accepting connections
+        self.accept_connections_thread = threading.Thread(target=self.accept_connections)
+        self.accept_connections_thread.daemon = True
+        self.accept_connections_thread.start()
 
     def accept_connections(self):
+        """
+        Continuously accept incoming client connections
+        """
         while True:
             try:
-                client_socket, _ = self.server_socket.accept()
+                client_socket, address = self.server_socket.accept()
                 self.clients.append(client_socket)
-                threading.Thread(target=self.handle_client, args=(client_socket,), daemon=True).start()
-                self.display_message(f"New client connected. Total clients: {len(self.clients)}")
-            except OSError:
-                break  # Exit if the server socket is closed
-
-    def handle_client(self, client_socket):
-        while True:
-            try:
-                message = client_socket.recv(1024).decode("utf-8")
-                if message:
-                    self.broadcast_message(message, client_socket)
-                    self.display_message(message)
-            except ConnectionError:
-                if client_socket in self.clients:
-                    self.clients.remove(client_socket)
+                
+                # Start a thread to handle this client
+                client_thread = threading.Thread(target=self.handle_client, args=(client_socket,))
+                client_thread.daemon = True
+                client_thread.start()
+            except Exception as e:
+                self.update_display(f"Error accepting connection: {e}")
                 break
 
-    def broadcast_message(self, message, sender_socket):
+    def handle_client(self, client_socket):
+        """
+        Handle individual client communication
+        """
+        try:
+            # Receive client name
+            client_name = client_socket.recv(1024).decode('utf-8')
+            self.client_names[client_socket] = client_name
+            self.update_display(f"{client_name} has joined the chat")
+
+            while True:
+                # Receive message from client
+                message = client_socket.recv(1024).decode('utf-8')
+                
+                # Check for disconnection
+                if not message:
+                    break
+
+                # Broadcast message to all other clients
+                self.broadcast(message, client_socket)
+        except Exception as e:
+            self.update_display(f"Error handling client: {e}")
+        finally:
+            # Remove the client and close socket
+            if client_socket in self.clients:
+                self.clients.remove(client_socket)
+            client_name = self.client_names.get(client_socket, "Unknown")
+            self.update_display(f"{client_name} has left the chat")
+            client_socket.close()
+
+    def broadcast(self, message, sender_socket):
+        """
+        Broadcast message to all clients except the sender
+        """
+        sender_name = self.client_names.get(sender_socket, "Unknown")
+        full_message = f"{sender_name}: {message}"
+        self.update_display(full_message)
+
         for client in self.clients:
             if client != sender_socket:
                 try:
-                    client.sendall(message.encode("utf-8"))
-                except ConnectionError:
+                    client.send(full_message.encode('utf-8'))
+                except:
+                    # Remove client if unable to send
                     self.clients.remove(client)
 
-    def display_message(self, message):
-        self.chat_box.config(state='normal')
-        self.chat_box.insert(END, message + "\n")
-        self.chat_box.config(state='disabled')
-        self.chat_box.see(END)
-
-    def on_close(self):
-        self.display_message("Shutting down server...")
-        if self.server_socket:
-            self.server_socket.close()
-        for client in self.clients:
-            client.close()
-        self.window.destroy()
-        sys.exit()
+    def update_display(self, message):
+        """
+        Update the server's chat display
+        """
+        self.chat_display.config(state=NORMAL)
+        self.chat_display.insert(END, message + "\n")
+        self.chat_display.config(state=DISABLED)
+        self.chat_display.see(END)
 
 def main():
     window = Tk()
     ChatServer(window)
     window.mainloop()
+
+if __name__ == '__main__':
+    main()
