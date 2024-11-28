@@ -14,7 +14,7 @@ class ChatServer:
     def __init__(self, window):
         self.window = window
         self.window.title("Chat Server")
-        self.window.geometry("400x500")
+        self.window.geometry("400x400")
 
         # Server socket setup
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,6 +28,9 @@ class ChatServer:
         self.client_names = {}
 
         # GUI Setup
+        Label(window, text="Chat Server", font=("Arial", 12)).pack(anchor="w", padx=10, pady=(5, 5))
+
+        Label(window, text="Chat History:", font=("Arial", 12)).pack(anchor="w", padx=10, pady=(1, 1))
         self.chat_display = Text(window, height=20, width=50)
         self.chat_display.pack(padx=10, pady=10)
         self.chat_display.config(state=DISABLED)

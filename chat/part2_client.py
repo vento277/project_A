@@ -15,7 +15,7 @@ class ChatClient:
         # Get client name from process name
         self.client_name = current_process().name
         self.window.title(f"Chat Client - {self.client_name}")
-        self.window.geometry("400x500")
+        self.window.geometry("400x400")
 
         # Socket setup
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -32,9 +32,18 @@ class ChatClient:
             self.window.quit()
             return
 
-        Label(window, text="Client{} @port #{}".format(current_process().name[-1], current_process().pid), font=("Arial", 12)).pack(anchor="w", padx=10, pady=(10, 10))
+        Label(window, text="Client{} @port #{}".format(current_process().name[-1], current_process().pid), font=("Arial", 12)).pack(anchor="w", padx=10, pady=(5, 5))
+
+        # Message Entry
+        self.message_frame = Frame(window)
+        self.message_frame.pack(padx=10, pady=5, fill=X)
+        Label(self.message_frame, text="Chat Message: ", font=("Arial", 12)).pack(anchor="w", side=LEFT)
+        self.message_entry = Entry(self.message_frame, width=40)
+        self.message_entry.pack(side=RIGHT, expand=True, fill=X, padx=(0,10))
+        self.message_entry.bind('<Return>', lambda event: self.send_message()) # Bind Enter key to send message
 
         # Chat Display
+        Label(window, text="Chat History:", font=("Arial", 12)).pack(anchor="w", padx=10, pady=(1, 1))
         self.chat_box = Text(window, height=20, width=50, wrap=WORD)
         self.chat_box.pack(padx=10, pady=10, fill=BOTH, expand=True)
         self.chat_box.config(state='disabled')
@@ -43,19 +52,6 @@ class ChatClient:
         self.chat_box.tag_configure("left", justify="left")
         self.chat_box.tag_configure("center", justify="center")
         self.chat_box.tag_configure("right", justify="right")
-
-        # Message Entry
-        self.message_frame = Frame(window)
-        self.message_frame.pack(padx=10, pady=5, fill=X)
-
-        self.message_entry = Entry(self.message_frame, width=40)
-        self.message_entry.pack(side=LEFT, expand=True, fill=X, padx=(0,10))
-
-        self.send_button = Button(self.message_frame, text="Send", command=self.send_message)
-        self.send_button.pack(side=RIGHT)
-
-        # Bind Enter key to send message
-        self.message_entry.bind('<Return>', lambda event: self.send_message())
 
         # Start receive thread
         self.receive_thread = threading.Thread(target=self.receive_messages)
@@ -88,7 +84,7 @@ class ChatClient:
             try:
                 self.client_socket.send(message.encode('utf-8'))
                 # Display sent message on right side
-                self.display_message(f"You: {message}", "right")
+                self.display_message(f"{self.client_name}: {message}", "right")
                 self.message_entry.delete(0, END)
             except Exception as e:
                 self.display_message(f"Error sending message: {e}", "center")
