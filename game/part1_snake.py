@@ -193,7 +193,20 @@ class Game():
         """
         lastX, lastY = self.snakeCoordinates[-1]
         #complete the method implementation below
-
+        #the lastx and lasty are tuple of snake head
+        match self.direction:
+            case'Up':
+                new_x=lastX
+                new_y=lastY + MOVEMENT
+            case 'Down':
+                new_x=lastX
+                new_y=lastY - MOVEMENT                
+            case 'Left':
+                new_x=lastX - MOVEMENT
+                new_y=lastY
+            case 'Right':
+                new_x=lastX + MOVEMENT
+                new_y=lastY
 
     def isGameOver(self, snakeCoordinates) -> None:
         """
@@ -251,7 +264,10 @@ if __name__ == "__main__":
     WINDOW_HEIGHT = 300 
     SNAKE_ICON_WIDTH = 15
     #add the specified constant PREY_ICON_WIDTH here     
-    PREY_ICON_WIDTH=5
+    #the prey icon with is about 5 pixel
+    PREY_ICON_WIDTH = 5
+    #each movement is about 10 pixel wide
+    MOVEMENT = 10
     
     BACKGROUND_COLOUR = "green"   #you may change this colour if you wish
     ICON_COLOUR = "yellow"        #you may change this colour if you wish
