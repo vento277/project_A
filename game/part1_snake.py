@@ -115,6 +115,8 @@ class Game():
         self.direction = "Left"
         self.gameNotOver = True
         self.createNewPrey()
+        #this factor controls how fast the game goes
+        self._time_factor = 1    #this is set to 1 at first
 
     def superloop(self) -> None:
         """
@@ -127,7 +129,13 @@ class Game():
         SPEED = 0.15     #speed of snake updates (sec)
         while self.gameNotOver:
             #complete the method implementation below
-            pass #remove this line from your implementation
+            #pass #remove this line from your implementation
+            
+            #call the move instance to get the sneak moving
+            self.move()
+            #We can set fixed wait time between each move task is called
+            #later on we can change time factor so we can speed up or down the movements
+            time.sleep(SPEED*self._time_factor)
 
     def whenAnArrowKeyIsPressed(self, e) -> None:
         """ 
@@ -159,9 +167,20 @@ class Game():
             The snake coordinates list (representing its length 
             and position) should be correctly updated.
         """
+        #New Snake Corrdinates has the snake head coordinates as a tuples
         NewSnakeCoordinates = self.calculateNewCoordinates()
         #complete the method implementation below
-
+        #first check if the agan is over if over inside the isGameOver will call gameover
+        self.isGameOver(NewSnakeCoordinates)
+        
+        #game is not over yet
+        if self.gameNotOver:
+            #
+            head_x,head_y=NewSnakeCoordinates
+        #Game is over
+        else:
+            return
+            
 
     def calculateNewCoordinates(self) -> tuple:
         """
@@ -186,6 +205,19 @@ class Game():
         """
         x, y = snakeCoordinates
         #complete the method implementation below
+        snake_die=False
+        #check to see if the snake hits the border the border is at x[0 to window width] y[0 to window height]
+        if x > WINDOW_WIDTH or x < 0 or y > WINDOW_HEIGHT or y <0:
+            snake_die=True
+        #check to see if the snake hit it's self on the head
+        elif snakeCoordinates in self.snakeCoordinates:
+            snake_die=True
+            
+        if snake_die:
+            #Set gameNotOver to False and we need to trigger gameover in GameQueneHandle
+            self.gameNotOver=False
+            #queue.put to a dictionary
+            self.queue.get_nowait({'game_over': True})
 
     def createNewPrey(self) -> None:
         """ 
@@ -199,16 +231,18 @@ class Game():
             away from the walls. 
         """
         THRESHOLD = 15   #sets how close prey can be to borders
-        Prey_size = 5    #The number we need to use to replace the 5
+        
         #complete the method implementation 
         x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
         y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)
         
         #calcuate the rectangle coordinates
-        rectangle=(x-Prey_size,y-Prey_size,x+Prey_size,y+Prey_size)
+        rectangleCoordinates=(x-PREY_ICON_WIDTH,y-PREY_ICON_WIDTH,x+PREY_ICON_WIDTH,y+PREY_ICON_WIDTH)
+        #we need the prey position to be know to other instances and this creay new prey does not even return anything
+        self.prey_position=rectangleCoordinates
         
         #add the prey task to the queue
-        self.queue.put(('prey',rectangle))
+        self.queue.get_nowait(('prey',self.prey_position))
 
 
 if __name__ == "__main__":
@@ -217,7 +251,8 @@ if __name__ == "__main__":
     WINDOW_HEIGHT = 300 
     SNAKE_ICON_WIDTH = 15
     #add the specified constant PREY_ICON_WIDTH here     
-
+    PREY_ICON_WIDTH=5
+    
     BACKGROUND_COLOUR = "green"   #you may change this colour if you wish
     ICON_COLOUR = "yellow"        #you may change this colour if you wish
 
