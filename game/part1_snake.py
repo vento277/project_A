@@ -207,6 +207,11 @@ class Game():
             case 'Right':
                 new_x=lastX + MOVEMENT
                 new_y=lastY
+            case _:
+                new_x=lastX
+                new_y=lastY 
+        #retun the new coordinate
+        return (new_x,new_y)
 
     def isGameOver(self, snakeCoordinates) -> None:
         """
