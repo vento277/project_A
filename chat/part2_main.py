@@ -1,3 +1,5 @@
+# Group#: G5
+# Student Names: Weifeng Ke & Peter Kim
 from tkinter import *
 import multiprocessing
 import time
