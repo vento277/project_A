@@ -114,6 +114,8 @@ class Game():
         #initial direction of the snake
         self.direction = "Left"
         self.gameNotOver = True
+        #initialize the attribute
+        self.prey_position=None
         self.createNewPrey()
         #this factor controls how fast the game goes
         self._time_factor = 1    #this is set to 1 at first
@@ -223,10 +225,12 @@ class Game():
         match self.direction:
             case'Up':
                 new_x=lastX
-                new_y=lastY + MOVEMENT
+                #the y direct grows down, so the top left is (0,0) bottom right is (windows width, windous height), so - to go up
+                new_y=lastY - MOVEMENT
             case 'Down':
                 new_x=lastX
-                new_y=lastY - MOVEMENT                
+                #the y direct grows down, so the top left is (0,0) bottom right is (windows width, windous height), so + to go up
+                new_y=lastY + MOVEMENT                
             case 'Left':
                 new_x=lastX - MOVEMENT
                 new_y=lastY
@@ -260,8 +264,9 @@ class Game():
         if snake_die:
             #Set gameNotOver to False and we need to trigger gameover in GameQueneHandle
             self.gameNotOver=False
-            #queue.put to a dictionary
+            #let the game queue handle know =
             self.queue.put({'game_over': True})
+            return
 
     def createNewPrey(self) -> None:
         """ 
@@ -286,7 +291,7 @@ class Game():
         self.prey_position=rectangleCoordinates
         
         #add the prey task to the queue
-        self.queue.put(('prey',self.prey_position))
+        self.queue.put({'prey':self.prey_position})
 
 
 if __name__ == "__main__":
