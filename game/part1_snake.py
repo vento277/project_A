@@ -175,10 +175,36 @@ class Game():
         
         #game is not over yet
         if self.gameNotOver:
-            #
-            head_x,head_y=NewSnakeCoordinates
-        #Game is over
+            #check to see if the snake has eat the prey
+            #that requrires snake location and prey location comparison
+            #express the snake head coordinates to head_x and head_y
+            x_head,y_head=NewSnakeCoordinates
+            x1_prey,y1_prey,x2_prey,y2_prey=self.prey_position
+            #if the snake head is in the snake head location
+            if (x1_prey<=x_head<=x2_prey) and (y1_prey<=y_head<=y2_prey):
+                #the snake has ate the prey
+                #so we need to make the snaker longer
+                self.snakeCoordinates.append(NewSnakeCoordinates)
+                #need to give snake a point
+                self.score=self.score+1
+                #also need to let the game queue handler know to update the score too
+                self.queue.put({"score":self.score})           
+                # we need to call the next prey location
+                self.createNewPrey()
+            else:
+                #the sanek head has not ate the prey 
+                #so nothign happens aside from updating the snake corrdinates tuple list
+                #the head is at the last of the tuple list so append to the last
+                self.snakeCoordinates.append(NewSnakeCoordinates)
+                #remove the tail so pop the first
+                self.snakeCoordinates.pop(0)                 
+                
+            #put the move task to the game handleing queue
+            self.queue.put({"move": self.snakeCoordinates})
+        #Game is over 
         else:
+            #game over we need to let game queue handle know
+            self.queue.put({"game_over":True})
             return
             
 
@@ -235,7 +261,7 @@ class Game():
             #Set gameNotOver to False and we need to trigger gameover in GameQueneHandle
             self.gameNotOver=False
             #queue.put to a dictionary
-            self.queue.get_nowait({'game_over': True})
+            self.queue.put({'game_over': True})
 
     def createNewPrey(self) -> None:
         """ 
@@ -260,7 +286,7 @@ class Game():
         self.prey_position=rectangleCoordinates
         
         #add the prey task to the queue
-        self.queue.get_nowait(('prey',self.prey_position))
+        self.queue.put(('prey',self.prey_position))
 
 
 if __name__ == "__main__":
