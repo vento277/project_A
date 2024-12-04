@@ -192,6 +192,10 @@ class Game():
                 self.queue.put({"score":self.score})           
                 # we need to call the next prey location
                 self.createNewPrey()
+                # we increase the snake by 10% each time it has ate a prey but we do not reduce too much where it takes longer to process the program than increase the speed
+                if self._time_factor > 0.4:
+                    #if the time factor is > 50% then we increase the speed by 10% every time it ate.
+                    self._time_factor-=0.1
             else:
                 #the sanek head has not ate the prey 
                 #so nothign happens aside from updating the snake corrdinates tuple list
@@ -299,9 +303,9 @@ if __name__ == "__main__":
     WINDOW_HEIGHT = 300 
     SNAKE_ICON_WIDTH = 15
     #add the specified constant PREY_ICON_WIDTH here     
-    #the prey icon with is about 5 pixel
+    #the prey icon with is about 10 pixel
     PREY_ICON_WIDTH = 10
-    #each movement is about 10 pixel wide
+    #each movement is about 15 pixel wide
     MOVEMENT = 15
     
     BACKGROUND_COLOUR, ICON_COLOUR = "black", "yellow"
