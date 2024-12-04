@@ -8,7 +8,6 @@
 
 import threading
 import queue        #the thread-safe queue from Python standard library
-
 from tkinter import Tk, Canvas, Button
 import random, time
 
@@ -301,12 +300,11 @@ if __name__ == "__main__":
     SNAKE_ICON_WIDTH = 15
     #add the specified constant PREY_ICON_WIDTH here     
     #the prey icon with is about 5 pixel
-    PREY_ICON_WIDTH = 5
+    PREY_ICON_WIDTH = 10
     #each movement is about 10 pixel wide
-    MOVEMENT = 10
+    MOVEMENT = 15
     
-    BACKGROUND_COLOUR = "green"   #you may change this colour if you wish
-    ICON_COLOUR = "yellow"        #you may change this colour if you wish
+    BACKGROUND_COLOUR, ICON_COLOUR = "black", "yellow"
 
     gameQueue = queue.Queue()     #instantiate a queue object using python's queue class
 
