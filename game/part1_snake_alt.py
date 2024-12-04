@@ -8,7 +8,6 @@ import time
 class Gui:
     def __init__(self):
         pygame.init()
-
         # GUI constants
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption('Snake Game')
@@ -191,6 +190,10 @@ class Game:
                 self.score += 1
                 self.queue.put({"score": self.score})           
                 self.createNewPrey()
+                # we increase the snake by 10% each time it has ate a prey but we do not reduce too much where it takes longer to process the program than increase the speed
+                if self._time_factor > 0.4:
+                    #if the time factor is > 40% then we increase the speed by 10% every time it ate.
+                    self._time_factor-=0.1
             else:
                 self.snakeCoordinates.append(new_head)
                 self.snakeCoordinates.pop(0)  
