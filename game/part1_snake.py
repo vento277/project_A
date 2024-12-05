@@ -192,9 +192,9 @@ class Game():
                 self.queue.put({"score":self.score})           
                 # we need to call the next prey location
                 self.createNewPrey()
-                # we increase the snake by 10% each time it has ate a prey but we do not reduce too much where it takes longer to process the program than increase the speed
+                # we increase the snake speed by 10% each time it has ate a prey 
                 if self._time_factor > 0.4:
-                    #if the time factor is > 50% then we increase the speed by 10% every time it ate.
+                    #if the time factor is > 40% then we increase the speed by 10% every time it ate.
                     self._time_factor-=0.1
             else:
                 #the sanek head has not ate the prey 
@@ -285,11 +285,17 @@ class Game():
         THRESHOLD = 15   #sets how close prey can be to borders
         
         #complete the method implementation 
+        #this randomly generate prey in side the canvas and also not on the border. 
         x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
         y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)
+        #this ensures the randomly generate prey don't land on top of the snake
+        while (x,y) in self.snakeCoordinates:
+            #complete the method implementation 
+            x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
+            y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)
         
         #calcuate the rectangle coordinates
-        rectangleCoordinates=(x-PREY_ICON_WIDTH,y-PREY_ICON_WIDTH,x+PREY_ICON_WIDTH,y+PREY_ICON_WIDTH)
+        rectangleCoordinates=(x-(PREY_ICON_WIDTH/2),y-(PREY_ICON_WIDTH/2),x+(PREY_ICON_WIDTH/2),y+(PREY_ICON_WIDTH/2))
         #we need the prey position to be know to other instances and this creay new prey does not even return anything
         self.prey_position=rectangleCoordinates
         
@@ -303,8 +309,8 @@ if __name__ == "__main__":
     WINDOW_HEIGHT = 300 
     SNAKE_ICON_WIDTH = 15
     #add the specified constant PREY_ICON_WIDTH here     
-    #the prey icon with is about 10 pixel
-    PREY_ICON_WIDTH = 10
+    #the prey icon is about 15x15 pixel big
+    PREY_ICON_WIDTH = 15
     #each movement is about 15 pixel wide
     MOVEMENT = 15
     
