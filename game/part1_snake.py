@@ -184,7 +184,7 @@ class Game():
             #if the snake head is in the snake head location
             if (x1_prey<=x_head<=x2_prey) and (y1_prey<=y_head<=y2_prey):
                 #the snake has ate the prey
-                #so we need to make the snaker longer
+                #so we need to make the snake longer
                 self.snakeCoordinates.append(NewSnakeCoordinates)
                 #need to give snake a point
                 self.score=self.score+1
