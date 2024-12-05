@@ -17,7 +17,7 @@ class Gui():
         This class takes care of the game's graphic user interface (gui)
         creation and termination.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         """        
             The initializer instantiates the main window and 
             creates the starting icons for the snake and the prey,
@@ -42,7 +42,7 @@ class Gui():
 
         self.screen.fill(pygame.Color(BACKGROUND_COLOUR))
 
-    def gameOver(self):
+    def gameOver(self) -> None:
         """
         This method is used at the end to display a
         game over message and gracefully exit on SPACE key press.
@@ -66,7 +66,7 @@ class Gui():
 
         pygame.quit()
 
-    def draw_game(self):
+    def draw_game(self) -> None:
         '''
         This method is used to set up the GUI and draw the necessary objects using pygame.
         '''
@@ -100,7 +100,7 @@ class Gui():
         except pygame.error:
             self.running = False  #exit gracefully if the display is closed
 
-    def main_loop(self, game):
+    def main_loop(self, game) -> None:
         '''
         This method is to run the game continuously using pygame (alternative to gui.root.mainloop()). 
         The purpose is to provide modularity to the alternative approach.
@@ -128,15 +128,15 @@ class Gui():
             self.clock.tick(30) #control game frame rate
 
 
-class QueueHandler:
+class QueueHandler():
     """
         This class implements the queue handler for the game.
     """
-    def __init__(self, queue, gui):
+    def __init__(self, queue, gui) -> None:
         self.queue = queue
         self.gui = gui
 
-    def queueHandler(self):
+    def queueHandler(self) -> None:
         '''
             This method handles the queue by constantly retrieving
             tasks from it and accordingly taking the corresponding
@@ -164,12 +164,12 @@ class QueueHandler:
         except queue.Empty:
             pass
 
-class Game:
+class Game():
     '''
         This class implements most of the game functionalities.
     '''
         
-    def __init__(self):
+    def __init__(self) -> None:
         """
            This initializer sets the initial snake coordinate list, movement
            direction, and arranges for the first prey to be created.

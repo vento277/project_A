@@ -5,7 +5,7 @@ from tkinter import *
 import socket
 import threading
 
-class ChatServer:
+class ChatServer():
     """
     This class implements the chat server.
     It uses the socket module to create a TCP socket and act as the chat server.
@@ -14,7 +14,7 @@ class ChatServer:
     the message to the other client.  
     It uses the tkinter module to create the GUI for the server client.
     """
-    def __init__(self, window):
+    def __init__(self, window) -> None:
         #store the main window reference for GUI management and set the window title and initial size
         self.window = window
         self.window.title("Chat Server")
@@ -49,7 +49,7 @@ class ChatServer:
         self.accept_connections_thread = threading.Thread(target=self.accept_connections, daemon = True) #daemon=True allows the thread to close when the main program exits   
         self.accept_connections_thread.start()
 
-    def accept_connections(self):
+    def accept_connections(self) -> None:
         """
         Continuously accept incoming client connections.
         """
@@ -68,7 +68,7 @@ class ChatServer:
                 #silently handle any communication errors
                 break
 
-    def handle_client(self, client_socket):
+    def handle_client(self, client_socket) -> None:
         """
         Handle individual client communication.
         """
@@ -102,7 +102,7 @@ class ChatServer:
             self.update_display(f"{client_name} has left the chat") #announce the client's departure
             client_socket.close() #close the client's socket to free up resources
 
-    def broadcast(self, message, sender_socket):
+    def broadcast(self, message, sender_socket) -> None:
         """
         Broadcast message to all clients except the sender.
         """
@@ -119,7 +119,7 @@ class ChatServer:
                 except:
                     self.clients.remove(client)     #remove client if unable to send
 
-    def update_display(self, message):
+    def update_display(self, message) -> None:
         """
         Update the server's chat display.
         """

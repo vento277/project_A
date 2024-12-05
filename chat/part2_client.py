@@ -6,13 +6,13 @@ import socket
 import threading
 from multiprocessing import current_process
 
-class ChatClient:
+class ChatClient():
     """
     This class implements the chat client.
     It uses the socket module to create a TCP socket and to connect to the server.
     It uses the tkinter module to create the GUI for the chat client.
     """
-    def __init__(self, window):
+    def __init__(self, window) -> None:
         #store the main window reference for GUI management and set the window title and initial size
         self.window = window
         self.client_name = current_process().name   #generate client name using the current process name
@@ -59,7 +59,7 @@ class ChatClient:
         self.receive_thread = threading.Thread(target=self.receive_messages, daemon = True)
         self.receive_thread.start()
 
-    def display_message(self, message: str, align: str ="left"):
+    def display_message(self, message: str, align: str ="left") -> None:
         """
         Display message with specified alignment.
         """
@@ -129,9 +129,12 @@ class ChatClient:
 
         self.window.quit()  #close the program window
 
-def main():
+def main() -> None:
+    #set up Tk object
     window = Tk()
+    #initialize a chat client object pass window in to interact with TKinter
     ChatClient(window)
+    #start the whole process 
     window.mainloop()
 
 if __name__ == '__main__':

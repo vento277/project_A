@@ -16,7 +16,7 @@ class Gui():
         This class takes care of the game's graphic user interface (gui)
         creation and termination.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         """        
             The initializer instantiates the main window and 
             creates the starting icons for the snake and the prey,
@@ -44,7 +44,7 @@ class Gui():
         for key in ("Left", "Right", "Up", "Down"):
             self.root.bind(f"<Key-{key}>", game.whenAnArrowKeyIsPressed)
 
-    def gameOver(self):
+    def gameOver(self) -> None:
         """
             This method is used at the end to display a
             game over button.
@@ -59,12 +59,12 @@ class QueueHandler():
     """
         This class implements the queue handler for the game.
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self.queue = gameQueue
         self.gui = gui
         self.queueHandler()
     
-    def queueHandler(self):
+    def queueHandler(self) -> None:
         '''
             This method handles the queue by constantly retrieving
             tasks from it and accordingly taking the corresponding
@@ -98,7 +98,7 @@ class Game():
     '''
         This class implements most of the game functionalities.
     '''
-    def __init__(self):
+    def __init__(self) -> None:
         """
            This initializer sets the initial snake coordinate list, movement
            direction, and arranges for the first prey to be created.
