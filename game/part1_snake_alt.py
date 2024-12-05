@@ -222,12 +222,25 @@ class Game:
             self.queue.put({'game_over': True})
 
     def createNewPrey(self):
-        THRESHOLD = 15   
-        x = random.randint(THRESHOLD, WINDOW_WIDTH - THRESHOLD)
-        y = random.randint(THRESHOLD, WINDOW_HEIGHT - THRESHOLD)
-        rectangleCoordinates = (x - PREY_ICON_WIDTH, y - PREY_ICON_WIDTH, x + PREY_ICON_WIDTH, y + PREY_ICON_WIDTH)
-        self.prey_position = rectangleCoordinates
-        self.queue.put({'prey': self.prey_position})
+        THRESHOLD = 15   #sets how close prey can be to borders
+        
+        #complete the method implementation 
+        #this randomly generate prey in side the canvas and also not on the border. 
+        x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
+        y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)
+        #this ensures the randomly generate prey don't land on top of the snake
+        while (x,y) in self.snakeCoordinates:
+            #complete the method implementation 
+            x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
+            y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)
+        
+        #calcuate the rectangle coordinates
+        rectangleCoordinates=(x-(PREY_ICON_WIDTH/2),y-(PREY_ICON_WIDTH/2),x+(PREY_ICON_WIDTH/2),y+(PREY_ICON_WIDTH/2))
+        #we need the prey position to be know to other instances and this creay new prey does not even return anything
+        self.prey_position=rectangleCoordinates
+        
+        #add the prey task to the queue
+        self.queue.put({'prey':self.prey_position})
 
 
 if __name__ == "__main__":
