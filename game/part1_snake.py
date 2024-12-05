@@ -107,7 +107,7 @@ class Game():
         self.score = 0
         #starting length and location of the snake
         #note that it is a list of tuples, each being an
-        # (x, y) tuple. Initially its size is 5 tuples.       
+        #(x, y) tuple. Initially its size is 5 tuples.       
         self.snakeCoordinates = [(495, 55), (485, 55), (475, 55),
                                  (465, 55), (455, 55)]
         #initial direction of the snake
@@ -129,9 +129,6 @@ class Game():
         """
         SPEED = 0.15     #speed of snake updates (sec)
         while self.gameNotOver:
-            #complete the method implementation below
-            #pass #remove this line from your implementation
-            
             #call the move instance to get the sneak moving
             self.move()
             #We can set fixed wait time between each move task is called
@@ -168,7 +165,7 @@ class Game():
             The snake coordinates list (representing its length 
             and position) should be correctly updated.
         """
-        #New Snake Corrdinates has the snake head coordinates as a tuples
+        #NewSnakeCorrdinates has the snake head coordinates as a tuples
         NewSnakeCoordinates = self.calculateNewCoordinates()
         #complete the method implementation below
         #first check if the agan is over if over inside the isGameOver will call gameover
@@ -182,7 +179,7 @@ class Game():
             x_head,y_head=NewSnakeCoordinates
             x1_prey,y1_prey,x2_prey,y2_prey=self.prey_position
             #if the snake head is in the snake head location
-            if (x1_prey<=x_head<=x2_prey) and (y1_prey<=y_head<=y2_prey):
+            if (x1_prey <= x_head <= x2_prey) and (y1_prey <= y_head <= y2_prey):
                 #the snake has ate the prey
                 #so we need to make the snake longer
                 self.snakeCoordinates.append(NewSnakeCoordinates)
@@ -190,9 +187,9 @@ class Game():
                 self.score=self.score+1
                 #also need to let the game queue handler know to update the score too
                 self.queue.put({"score":self.score})           
-                # we need to call the next prey location
+                #we need to call the next prey location
                 self.createNewPrey()
-                # we increase the snake speed by 10% each time it has ate a prey 
+                #we increase the snake speed by 10% each time it has ate a prey 
                 if self._time_factor > 0.4:
                     #if the time factor is > 40% then we increase the speed by 10% every time it ate.
                     self._time_factor-=0.1
@@ -283,8 +280,6 @@ class Game():
             away from the walls. 
         """
         THRESHOLD = 15   #sets how close prey can be to borders
-        
-        #complete the method implementation 
         #this randomly generate prey in side the canvas and also not on the border. 
         x=random.randint(THRESHOLD,WINDOW_WIDTH-THRESHOLD)
         y=random.randint(THRESHOLD,WINDOW_HEIGHT-THRESHOLD)

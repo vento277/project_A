@@ -1,5 +1,6 @@
 # Group#: G5
 # Student Names: Weifeng Ke & Peter Kim
+
 from tkinter import *
 import multiprocessing
 import time
@@ -20,7 +21,7 @@ if __name__ == "__main__":
     
     time.sleep(1)  #to ensure server is up and running; may be commented out or changed
 
-    numberOfClients = 2  #Change this value for a different number of clients
+    numberOfClients = 5  #Change this value for a different number of clients
     for count in range(1, numberOfClients+1):
         client_process = multiprocessing.Process(target=part2_client.main, name=f"Client{count}")
         client_process.start()
@@ -40,10 +41,10 @@ if __name__ == "__main__":
 
 # For Mac
 # if __name__ == "__main__":
-#     server = multiprocessing.Process(target=server.main)
+#     server = multiprocessing.Process(target=part2_server.main)
 #     server.start()
 #     time.sleep(1)  #to ensure server is up and running; may be commented out or changed
 
 #     numberOfClients = 2  #Change this value for a different number of clients
 #     for count in range(1, numberOfClients+1):
-#         multiprocessing.Process(target=client.main, name=f"Client{count}").start()
+#         multiprocessing.Process(target=part2_client.main, name=f"Client{count}").start()
