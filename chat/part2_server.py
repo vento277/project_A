@@ -14,7 +14,7 @@ class ChatServer():
     the message to the other client.  
     It uses the tkinter module to create the GUI for the server client.
     """
-    def __init__(self, window) -> None:
+    def __init__(self, window:Tk) -> None:
         #store the main window reference for GUI management and set the window title and initial size
         self.window = window
         self.window.title("Chat Server")
@@ -102,7 +102,7 @@ class ChatServer():
             self.update_display(f"{client_name} has left the chat") #announce the client's departure
             client_socket.close() #close the client's socket to free up resources
 
-    def broadcast(self, message: str, sender_socket) -> None:
+    def broadcast(self, message: str, sender_socket: socket) -> None:
         """
         Broadcast message to all clients except the sender.
         """
@@ -129,7 +129,9 @@ class ChatServer():
         self.chat_display.see(END)  #scroll to the bottom to show the most recent message
 
 def main():
+    #create a TKinter object
     window = Tk()
+    #crate a ChatServer object
     ChatServer(window)
     window.mainloop()
 

@@ -178,8 +178,8 @@ class Game():
             #express the snake head coordinates to head_x and head_y
             x_head,y_head=NewSnakeCoordinates
             x1_prey,y1_prey,x2_prey,y2_prey=self.prey_position
-            #if the snake head is in the snake head location
-            if (x1_prey <= x_head <= x2_prey) and (y1_prey <= y_head <= y2_prey):
+            #if the snake head is in the snake head location and the snake head is within the bound of the prey +/- half the SNAKE_ICON_WIDTH it will be consider captured
+            if (x1_prey-(SNAKE_ICON_WIDTH/2) <= x_head <= x2_prey+(SNAKE_ICON_WIDTH/2)) and (y1_prey-(SNAKE_ICON_WIDTH/2) <= y_head <= y2_prey+(SNAKE_ICON_WIDTH/2)):
                 #the snake has ate the prey
                 #so we need to make the snake longer
                 self.snakeCoordinates.append(NewSnakeCoordinates)

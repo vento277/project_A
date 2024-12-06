@@ -12,7 +12,7 @@ class ChatClient():
     It uses the socket module to create a TCP socket and to connect to the server.
     It uses the tkinter module to create the GUI for the chat client.
     """
-    def __init__(self, window) -> None:
+    def __init__(self, window: Tk) -> None:
         #store the main window reference for GUI management and set the window title and initial size
         self.window = window
         self.client_name = current_process().name   #generate client name using the current process name

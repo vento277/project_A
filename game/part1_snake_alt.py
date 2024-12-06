@@ -63,9 +63,11 @@ class Gui():
             game_over_rect = game_over_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 3))    #text positioning
             self.screen.blit(game_over_text, game_over_rect)    #draw text
             pygame.display.flip() #update display
-
+        #free up system resources
         pygame.quit()
-
+        #return to the main loop and finish
+        return None
+    
     def draw_game(self) -> None:
         '''
         This method is used to set up the GUI and draw the necessary objects using pygame.
@@ -260,10 +262,10 @@ class Game():
             #express the snake head coordinates to head_x and head_y
             x_head, y_head = NewSnakeCoordinates 
             x1_prey, y1_prey, x2_prey, y2_prey = self.prey_position
-            #if the snake head is in the snake head location
-            if (x1_prey <= x_head <= x2_prey) and (y1_prey <= y_head <= y2_prey):
+            #if the snake head is in the snake head location and the snake head is within the bound of the prey +/- half the SNAKE_ICON_WIDTH it will be consider captured
+            if (x1_prey-(SNAKE_ICON_WIDTH/2) <= x_head <= x2_prey+(SNAKE_ICON_WIDTH/2)) and (y1_prey-(SNAKE_ICON_WIDTH/2) <= y_head <= y2_prey+(SNAKE_ICON_WIDTH/2)):
                 #the snake has ate the prey
-                #so we need to make the snake longer
+                #so we need to make the snake longer 
                 self.snakeCoordinates.append(NewSnakeCoordinates)
                 #need to give snake a point
                 self.score += 1
