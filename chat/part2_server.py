@@ -102,7 +102,7 @@ class ChatServer():
             self.update_display(f"{client_name} has left the chat") #announce the client's departure
             client_socket.close() #close the client's socket to free up resources
 
-    def broadcast(self, message, sender_socket) -> None:
+    def broadcast(self, message: str, sender_socket) -> None:
         """
         Broadcast message to all clients except the sender.
         """
@@ -117,9 +117,9 @@ class ChatServer():
                     client.send(full_message.encode('utf-8'))   #encode the message to bytes and send it to the client
 
                 except:
-                    self.clients.remove(client)     #remove client if unable to send
+                    self.clients.remove(client) #remove client if unable to send
 
-    def update_display(self, message) -> None:
+    def update_display(self, message: str) -> None:
         """
         Update the server's chat display.
         """

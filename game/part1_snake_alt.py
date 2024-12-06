@@ -95,7 +95,7 @@ class Gui():
             
             #display current score
             self.screen.blit(score_text, (10, 10))
-            pygame.display.flip()
+            pygame.display.flip() #update the display
 
         except pygame.error:
             self.running = False  #exit gracefully if the display is closed
